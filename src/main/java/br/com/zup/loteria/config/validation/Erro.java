@@ -1,12 +1,12 @@
 package br.com.zup.loteria.config.validation;
 
-public class ErroFormulario {
+public class Erro {
 	
 	private String campo;
 	private String erro;
 	
 	
-	public ErroFormulario(String campo, String erro) {
+	public Erro(String campo, String erro) {
 		this.campo = campo;
 		this.erro = erro;
 	}

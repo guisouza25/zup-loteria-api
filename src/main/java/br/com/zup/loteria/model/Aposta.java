@@ -1,11 +1,12 @@
 package br.com.zup.loteria.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,25 +14,35 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Aposta {
+public class Aposta implements Serializable  {
+
+	private static final long serialVersionUID = 8064027695516453633L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private LocalDateTime dataDaAposta = LocalDateTime.now();
-	private String numerosGerados;
+	
+	private LocalDateTime dataAposta = LocalDateTime.now();
+	
+	@ElementCollection
+	@Column(name = "numeros", nullable = false)
+	private Set<Integer> numeros = new HashSet<Integer>();
 
 	@ManyToOne
 	private Usuario usuario;
+	
+	@ManyToOne
+	private Sorteio sorteio;
 
 	
 	public Aposta() {
-		
 	}
 	
-	public Aposta(String numerosGerados, Usuario usuario) {
-		this.numerosGerados = numerosGerados;
+	public Aposta(Set<Integer> numeros, Usuario usuario, Sorteio sorteio) {
+		this.numeros = numeros;
 		this.usuario = usuario;
+		this.sorteio = sorteio;
 	}
 
 	
@@ -39,37 +50,21 @@ public class Aposta {
 		return id;
 	}
 
-	public LocalDateTime getDataDaAposta() {
-		return dataDaAposta;
+	public LocalDateTime getDataAposta() {
+		return dataAposta;
 	}
 
-	public String getNumerosGerados() {
-		return numerosGerados;
+	public Set<Integer> getNumeros() {
+		return numeros;
 	}
 
 	public Usuario getUsuario() {
 		return usuario;
 	}
-
 	
-	public static String gerarNumerosAleatorios(Integer quantidade) {
-
-		List<Integer> numeros = new ArrayList<Integer>();
-		
-		for (int i = 0; i < quantidade; i++) {
-			Integer numeroAleatorio = new Random().nextInt(61);
-			
-			while(numeros.contains(numeroAleatorio)) {
-				numeroAleatorio = new Random().nextInt(61);
-			}
-			
-			numeros.add(numeroAleatorio);
-		}
-
-		return numeros
-				.stream()
-				.map(Object::toString)
-				.collect(Collectors.joining(", "));
-		
+	public Sorteio getSorteio() {
+		return sorteio;
 	}
+	
+	
 }

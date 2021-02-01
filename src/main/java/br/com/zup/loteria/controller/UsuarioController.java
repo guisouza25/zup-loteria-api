@@ -26,7 +26,7 @@ public class UsuarioController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<Aposta> cadastrarUsuario(@RequestBody @Valid UsuarioForm usuarioForm ) {
-		System.out.println(usuarioForm.getEmail());
+		
 		Usuario usuario = usuarioForm.converter();
 		usuarioRepository.save(usuario);
 		

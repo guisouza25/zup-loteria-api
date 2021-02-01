@@ -6,21 +6,24 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.zup.loteria.helpers.NumerosHelper;
 import br.com.zup.loteria.model.Aposta;
 
 public class ApostaDto {
 	
 	private Long id;
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime dataDaAposta;
-	private String numerosGerados;
+	private String numeros;
 	private String emailUsuario;
+	private Long sorteio;
 	
 	public ApostaDto(Aposta aposta) {
 		this.id = aposta.getId();
-		this.dataDaAposta = aposta.getDataDaAposta();
-		this.numerosGerados = aposta.getNumerosGerados();
+		this.dataDaAposta = aposta.getDataAposta();
+		this.numeros = NumerosHelper.converteEOrdenaNumeros(aposta.getNumeros());
 		this.emailUsuario = aposta.getUsuario().getEmail();
+		this.sorteio = aposta.getSorteio().getId();
 	}
 
 	public Long getId() {
@@ -31,12 +34,16 @@ public class ApostaDto {
 		return dataDaAposta;
 	}
 
-	public String getNumerosGerados() {
-		return numerosGerados;
+	public String getNumeros() {
+		return numeros;
 	}
 
 	public String getEmailUsuario() {
 		return emailUsuario;
+	}
+	
+	public Long getSorteio() {
+		return sorteio;
 	}
 
 	public static List<ApostaDto> converter(List<Aposta> apostas) {
